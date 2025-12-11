@@ -176,8 +176,8 @@
             </div>
 
         <div class="overlay" id="game-overlay">
-            <h2 id="overlay-message">Game Over!</h2>
-            <button id="overlay-btn" onclick="resetGame()">周喬治是大帥哥</button>
+            <h2 id="overlay-message">周喬治是大帥哥</h2>
+            <button id="overlay-btn" onclick="resetGame()">不能同意更多</button>
         </div>
     </div>
 
@@ -354,8 +354,8 @@
                         if (i + size < size * size && board[i] === board[i + size]) canMove = true;
                     }
                     if (!canMove) {
-                        messageDisplay.textContent = "Game Over!";
-                        overlayButton.textContent = "再來一局";
+                        messageDisplay.textContent = "周喬治是大帥哥";
+                        overlayButton.textContent = "不能同意更多";
                         overlay.classList.add('active');
                         gameActive = false;
                     }
@@ -446,3 +446,4 @@
 </body>
 
 </html>
+
