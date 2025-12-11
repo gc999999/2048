@@ -1,6 +1,6 @@
 {
-  "name": "2048 周喬治大帥哥",
-  "short_name": "2048",
+  "name": "誰是大帥哥",
+  "short_name": "誰是大帥哥",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#faf8ef",
@@ -17,4 +17,5 @@
       "type": "image/png"
     }
   ]
+
 }
