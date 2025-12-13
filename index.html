@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>誰是大帥哥?</title>
+    <title>2048 - 周喬治大帥哥</title>
 
     <link rel="manifest" href="./manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="周喬治2048">
+    
     <style>
         :root {
             --bg-color: #faf8ef;
@@ -28,7 +30,7 @@
             height: 100vh;
             margin: 0;
             overflow: hidden; 
-            touch-action: none; /* 禁用瀏覽器預設觸控手勢，防止捲動 */
+            touch-action: none; 
         }
 
         header {
@@ -89,11 +91,12 @@
             font-size: 30px;
             font-weight: bold;
             color: var(--text-dark);
-            transition: all 0.8s ease-in-out;
+            /* ★ 動畫速度調整為 0.6 秒 */
+            transition: all 0.6s ease-in-out; 
             user-select: none;
         }
 
-        /* 數字顏色樣式 */
+        /* 數字顏色樣式 (略) */
         .tile-2 { background-color: #eee4da; }
         .tile-4 { background-color: #ede0c8; }
         .tile-8 { background-color: #f2b179; color: var(--text-light); }
@@ -153,8 +156,32 @@
             transform: scale(0.96);
         }
 
-        .controls {
+        /* 觸控板樣式 */
+        .touch-pad-wrapper {
             margin-top: 20px;
+            width: 300px;
+            border-radius: 10px;
+            background-color: #eee4da; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #touch-pad-area {
+            width: 100%;
+            height: 80px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: bold;
+            border-radius: 10px;
+            user-select: none;
+            touch-action: none; 
+            cursor: pointer;
+        }
+
+        .controls {
+            margin-top: 10px;
             color: #776e65;
             font-size: 14px;
             text-align: center;
@@ -176,19 +203,25 @@
             </div>
 
         <div class="overlay" id="game-overlay">
-            <h2 id="overlay-message">周喬治是大帥哥</h2>
-            <button id="overlay-btn" onclick="resetGame()">不能同意更多</button>
+            <h2 id="overlay-message">Game Over!</h2>
+            <button id="overlay-btn" onclick="resetGame()">再來一局</button>
+        </div>
+    </div>
+    
+    <div class="touch-pad-wrapper">
+        <div id="touch-pad-area">
+            TOUCH PAD (上下左右滑動)
         </div>
     </div>
 
     <div class="controls">
-        電腦：方向鍵 | 手機：滑動螢幕
+        電腦：方向鍵 | 手機：遊戲區或觸控板滑動
     </div>
 
     <script>
-        // 確保 DOM 載入後才執行，避免找不到元素
         document.addEventListener('DOMContentLoaded', () => {
             const gridContainer = document.getElementById('grid-container');
+            const touchPadArea = document.getElementById('touch-pad-area'); 
             const scoreDisplay = document.getElementById('score');
             const overlay = document.getElementById('game-overlay');
             const messageDisplay = document.getElementById('overlay-message');
@@ -198,7 +231,7 @@
             let score = 0;
             const size = 4;
             let gameActive = true;
-            let hasWon = false; // 勝利狀態標記
+            let hasWon = false; 
 
             // 觸控變數
             let touchStartX = 0;
@@ -208,14 +241,13 @@
 
             // --- 遊戲核心功能 ---
 
-            // 初始化遊戲
             window.initGame = function() {
                 board = Array(size * size).fill(0);
                 score = 0;
                 gameActive = true;
                 hasWon = false;
                 overlay.classList.remove('active');
-                overlayButton.textContent = "再來一局"; // 確保按鈕恢復預設文字
+                overlayButton.textContent = "再來一局"; 
                 updateScore();
                 
                 addRandomTile();
@@ -223,12 +255,10 @@
                 drawBoard();
             }
 
-            // 重置遊戲 (供按鈕點擊使用)
             window.resetGame = function() {
                 initGame();
             }
 
-            // 繪製畫面
             function drawBoard() {
                 gridContainer.innerHTML = '';
                 for (let i = 0; i < size * size; i++) {
@@ -243,7 +273,6 @@
                 }
             }
 
-            // 隨機生成數字
             function addRandomTile() {
                 let emptyTiles = [];
                 board.forEach((val, index) => {
@@ -260,7 +289,6 @@
                 scoreDisplay.textContent = score;
             }
 
-            // 核心邏輯：滑動與合併
             function slide(row) {
                 let filteredRow = row.filter(num => num);
                 for (let i = 0; i < filteredRow.length - 1; i++) {
@@ -277,7 +305,6 @@
                 return filteredRow;
             }
 
-            // 各方向移動函數
             function moveLeft() {
                 let moved = false;
                 for (let i = 0; i < size * size; i += size) {
@@ -330,9 +357,7 @@
                 return moved;
             }
 
-            // 狀態檢查 (勝利/失敗)
             function checkStatus() {
-                // 1. 檢查勝利 (2048達成)
                 if (board.includes(2048) && !hasWon) {
                     messageDisplay.textContent = "周喬治是大帥哥";
                     overlayButton.textContent = "不能同意更多";
@@ -342,20 +367,17 @@
                     return;
                 }
 
-                if (hasWon) return; // 已經贏了就不用再檢查失敗
+                if (hasWon) return;
 
-                // 2. 檢查失敗 (無空位且無法合併)
                 if (!board.includes(0)) {
                     let canMove = false;
                     for (let i = 0; i < size * size; i++) {
-                        // 檢查右側
                         if ((i + 1) % size !== 0 && board[i] === board[i + 1]) canMove = true;
-                        // 檢查下方
                         if (i + size < size * size && board[i] === board[i + size]) canMove = true;
                     }
                     if (!canMove) {
-                        messageDisplay.textContent = "周喬治是大帥哥";
-                        overlayButton.textContent = "不能同意更多";
+                        messageDisplay.textContent = "Game Over!";
+                        overlayButton.textContent = "再來一局";
                         overlay.classList.add('active');
                         gameActive = false;
                     }
@@ -367,7 +389,8 @@
                     addRandomTile();
                     drawBoard();
                     updateScore();
-                    setTimeout(checkStatus, 850);
+                    /* ★ 邏輯延遲調整為 650 毫秒 */
+                    setTimeout(checkStatus, 650); 
                 }
             }
 
@@ -384,53 +407,55 @@
                     case 'ArrowDown': moved = moveDown(); break;
                     default: return;
                 }
-                if (moved) e.preventDefault(); // 防止按鍵捲動畫面
+                if (moved) e.preventDefault(); 
                 afterMove(moved);
             });
 
-            // 2. 觸控監聽 (手機/平板)
-            gridContainer.addEventListener('touchstart', (e) => {
-                if (!gameActive) return;
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }, { passive: false });
-
-            gridContainer.addEventListener('touchend', (e) => {
-                if (!gameActive) return;
-                touchEndX = e.changedTouches[0].clientX;
-                touchEndY = e.changedTouches[0].clientY;
-                handleSwipe();
-            }, { passive: false });
-
-            // 防止觸控滑動時畫面跑掉
-            document.addEventListener('touchmove', (e) => {
-                if (gameActive) e.preventDefault();
-            }, { passive: false });
-
+            // 2. 觸控滑動處理邏輯
             function handleSwipe() {
                 const deltaX = touchEndX - touchStartX;
                 const deltaY = touchEndY - touchStartY;
                 const absX = Math.abs(deltaX);
                 const absY = Math.abs(deltaY);
-                const threshold = 30; // 最小滑動距離
+                const threshold = 30; 
 
                 if (Math.max(absX, absY) > threshold) { 
                     let moved = false;
                     if (absX > absY) {
-                        // 水平移動
                         moved = (deltaX > 0) ? moveRight() : moveLeft();
                     } else {
-                        // 垂直移動
                         moved = (deltaY > 0) ? moveDown() : moveUp();
                     }
                     afterMove(moved);
                 }
             }
-            
-            // 3. PWA Service Worker 註冊 (讓應用程式支援離線運行)
+
+            // 3. 觸控事件設置 (套用到多個元素: 遊戲區和觸控板)
+            function setupTouchListeners(element) {
+                element.addEventListener('touchstart', (e) => {
+                    if (!gameActive) return;
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: false });
+
+                element.addEventListener('touchend', (e) => {
+                    if (!gameActive) return;
+                    touchEndX = e.changedTouches[0].clientX;
+                    touchEndY = e.changedTouches[0].clientY;
+                    handleSwipe();
+                }, { passive: false });
+                
+                element.addEventListener('touchmove', (e) => {
+                    if (gameActive) e.preventDefault();
+                }, { passive: false });
+            }
+
+            setupTouchListeners(gridContainer);
+            setupTouchListeners(touchPadArea); 
+
+            // 4. PWA Service Worker 註冊
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                    // 請注意：此處假設你的 sw.js 和 manifest.json 檔在同一個目錄
                     navigator.serviceWorker.register('/sw.js').then(function(registration) {
                         console.log('Service Worker 註冊成功.');
                     }, function(err) {
@@ -444,9 +469,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
-
