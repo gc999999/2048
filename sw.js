@@ -1,4 +1,4 @@
-const CACHE_NAME = '2048-pwa-v1.2.1';
+const CACHE_NAME = '2048-pwa-v1.2.2';
 const urlsToCache = [
   '/', // 根目錄
   'index.html', // 你的遊戲檔案
@@ -31,5 +31,6 @@ self.addEventListener('fetch', event => {
   );
 
 });
+
 
 
