@@ -92,7 +92,7 @@
             font-weight: bold;
             color: var(--text-dark);
             /* ★ 動畫速度調整為 0.6 秒 */
-            transition: all 0.6s ease-in-out; 
+            transition: all 1.0s ease-in-out; 
             user-select: none;
         }
 
@@ -390,7 +390,7 @@
                     drawBoard();
                     updateScore();
                     /* ★ 邏輯延遲調整為 650 毫秒 */
-                    setTimeout(checkStatus, 650); 
+                    setTimeout(checkStatus, 1050); 
                 }
             }
 
@@ -470,4 +470,5 @@
     </script>
 </body>
 </html>
+
 
